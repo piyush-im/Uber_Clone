@@ -1,0 +1,44 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Build and cache
+dist/
+build/
+.cache/
+tmp/
+temp/
+
+# Coverage (if using testing)
+coverage/
+
+# PM2 logs (if using pm2)
+pids/
+*.pid
+*.seed
+
+# Local .env files for different environments
+.env.*
+!.env.example
+
+# Optional: If using uploads folder in backend (exclude user uploaded files)
+uploads/
