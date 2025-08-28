@@ -7,42 +7,48 @@ const CaptainProtectWrapper = ({ children }) => {
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
-    const {captain,setCaptain}=useContext(CaptainDataContext)
-    // console.log(token);
-    const [isLoading,setisLoading]=useState(true);
-    
+    const { captain, setCaptain } = useContext(CaptainDataContext);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        // No token → redirect immediately
         if (!token) {
-            navigate('/captain-login'); // Redirect if no token
-        }
-    }, [token, navigate])
-    axios.get(`${import.meta.env.VITE_BASE_URL}/captains/profile`,{
-        headers:{
-            Authorization:`Bearer ${token}`
+            navigate('/captain-login');
+            return;
         }
 
-    }).then(response=>{
-        if(response.status===200){
-            setCaptain(response.data.captain);
-            setisLoading(false)
-        }
-    })
-    .catch(err=>{
-        console.log(err);
-        localStorage.removeItem('token');
-        navigate('/captain-login');
-        
-    })
+        // Validate token & fetch profile only once
+        const fetchProfile = async () => {
+            try {
+                const response = await axios.get(
+                    `${import.meta.env.VITE_BASE_URL}/captains/profile`,
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                        withCredentials: true, // if you're using cookies
+                    }
+                );
+
+                if (response.status === 200) {
+                    setCaptain(response.data.captain);
+                    setIsLoading(false);
+                }
+            } catch (err) {
+                console.error(err);
+                localStorage.removeItem('token');
+                navigate('/captain-login');
+            }
+        };
+
+        fetchProfile();
+    }, [token, navigate, setCaptain]);
+
     if (isLoading) {
-        return(
-            <div>Loading...</div>
-        );
+        return <div>Loading...</div>;
     }
 
-    // If there's no token, navigate and don't render the children
+    // Prevent children from rendering while redirecting
     if (!token) {
-        return null; // Prevent rendering children while navigating
+        return null;
     }
 
     return <>{children}</>;

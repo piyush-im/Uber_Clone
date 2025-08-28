@@ -13,6 +13,8 @@ import CaptainHome from "./Pages/CaptainHome";
 import CaptainProtectedWrapper from "./Pages/CaptainProtectedWrapper";
 import CaptainLogout from "./Pages/CaptainLogout";
 
+
+
 const App = () => {
   return (
     <div>
